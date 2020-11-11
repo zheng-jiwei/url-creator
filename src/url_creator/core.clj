@@ -115,11 +115,11 @@
        )
      (string? str-keyword)
      (let [segs (str/split str-keyword #"\.")
-           _ (prn "#### segs=" segs)
+           ;_ (prn "#### segs=" segs)
            result (map (fn [seg]
                          (cond
                            (str/starts-with? seg ":") (fill-field-data record (keyword (str/replace-first seg ":" "")))
-                           (str/includes? seg "@") (str/replace (first (fill-field-data record (str/replace seg "@" "/"))) "/" "")
+                           (str/includes? seg "$") (str/replace (first (fill-field-data record (str/replace seg "$" "/"))) "/" "")
                            (collection? (clojure.edn/read-string seg)) (fill-field-data record (clojure.edn/read-string seg))
                            :else seg
                            )
@@ -155,11 +155,11 @@
         cond_1 (cond-fn h)
         cond_2 (cond-fn t)
         ]
-    (prn "compare result= ###" cond_1 m cond_2)
+    ;(prn "compare result= ###" cond_1 m cond_2)
     (cond
       (= m "!=") (not= cond_1 cond_2)
       (= m "==") (= cond_1 cond_2)
-      (= m "in") (some #(= cond_1 %) cond_2)
+      (= m "in") (not (nil? (some #(= cond_1 %) cond_2)))
       (= m "&&") (and cond_1 cond_2)
       (= m "||") (or cond_1 cond_2)
       (or (= m ">") (= m ">=") (= m "<") (= m "<=")) ((ns-resolve *ns* (symbol m)) cond_1 cond_2)
@@ -176,21 +176,21 @@
     )
   )
 
-(defn get-url-from-condition [record array-data]
-  (let [ctrl-cond (first array-data)]
+(defn get-url-from-condition [record input-data]
+  (let [ctrl-cond (first input-data)]
     (cond
       (or (= ctrl-cond :if) (= ctrl-cond :elif))
-      (if (is-condition-true record (second array-data))
-        (get-url-from-condition record (first (nnext array-data)))
-        (get-url-from-condition record (next (nnext array-data)))
+      (if (is-condition-true record (second input-data))
+        (get-url-from-condition record (first (nnext input-data)))
+        (get-url-from-condition record (next (nnext input-data)))
         )
       (= ctrl-cond :else)
-      (get-url-from-condition record (last array-data))
-      (= ctrl-cond :list) (flatten (keep #(get-url-from-condition record %) (next array-data)))
+      (get-url-from-condition record (last input-data))
+      (= ctrl-cond :list) (flatten (keep #(get-url-from-condition record %) (next input-data)))
       (nil? ctrl-cond) nil
       :else
       ;url pattern
-      (fill-field-data record array-data)
+      (fill-field-data record input-data)
       )
     )
   )
