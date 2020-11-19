@@ -6,9 +6,15 @@
   :dependencies [
                  [org.clojure/clojure "1.10.0"]
                  [eggplant "0.2.0"]
+                 [org.apache.velocity/velocity "1.7"]
+                 [org.apache.velocity/velocity-engine-core "2.2"]
+                 [org.apache.velocity.tools/velocity-tools-generic "3.0"]
+                 [commons-codec/commons-codec "1.11"]
                  ]
   :main ^:skip-aot url-creator.core
-  :target-path "target/%s"
+  :java-source-paths ["src/custom/velocity/"]
+  :target-path "target/"
+  :aot :all
   :profiles {:uberjar {:aot :all}
              :test-paths ["test"]
              :test-selectors {:default (complement :all)

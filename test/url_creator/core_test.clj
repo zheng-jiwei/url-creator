@@ -16,7 +16,7 @@
            (specification
              {:given "テスト（１）\n
                       :record (:cf_n_dateはDateタイプですが、YYYYの部分のみURLに埋め込むたい) \n
-                      :input (ユーザー入力したIF文) がある"
+                      :input (ユーザー入力したIF文) "
               :when  "#url-creator.core/get-url-from-condition を使って、IF文は成立の場合"
               :then  ":result (yearの部分だけURLに追加する) を期待される"
               :data {:record {:news {:category {:_key 9, :rank 80}, :type 5 :status 1, :_key "8888", :cf_n_date new_date}}
@@ -238,7 +238,8 @@
 ;  )
 
 
-; https://www.techscore.com/tech/Java/ApacheJakarta/Velocity/index/ 承認対象ワークフロー： 
+; https://www.techscore.com/tech/Java/ApacheJakarta/Velocity/index/ 
+; 承認対象ワークフロー： 
 ; #foreach ($workflow in ${workflows})
 ;    ・${workflow.name} (${workflow.path}) 
 ; #end 

@@ -1,0 +1,24 @@
+abcd
+
+#if ($a!=$b)
+    "aaaa"
+#else
+    "bbbb"
+#end
+
+
+${news.category}
+
+
+#set( $a = "Velocity" )
+
+#*
+
+#foreach ($mud in ${news.category})
+    $mud
+#end
+
+#set( $a = "Velocity" )
+
+
+*#
